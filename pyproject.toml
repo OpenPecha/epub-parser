@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "epub-parser"
+version = "0.1.0"
+description = "Stream text from EPUB files with font family and font size metadata"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+keywords = ["epub", "fonts", "parser", "streaming", "ebook"]
+dependencies = [
+    "ebooklib>=0.18",
+    "beautifulsoup4>=4.12.0",
+    "lxml>=4.9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+]
+
+[project.scripts]
+epub-parser = "epub_font_parser.cli:main"
+
+[project.urls]
+Repository = "https://github.com/OpenPecha/epub-parser"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["epub_font_parser*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
