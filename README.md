@@ -52,8 +52,49 @@ epub-parser book.epub --format jsonl
 python -m epub_font_parser book.epub
 ```
 
+## TEI XML conversion
+
+In addition to streaming spans, the package can convert an EPUB into a single
+TEI XML document. Font sizes are classified by Tibetan-character frequency
+(most common size = regular, larger = `<hi rend="head">`, smaller =
+`<hi rend="small">`), and Tibetan text is normalized to NFC/NFD with
+Tibetan-specific rules. The output structure follows the BDRC e-text format
+used in [buda-base/tibetan-etext-tools](https://github.com/buda-base/tibetan-etext-tools/tree/main/IE11249).
+
+```python
+from epub_font_parser import epub_to_tei_xml, epub_to_xml_file
+
+# Get the TEI XML as a string
+xml = epub_to_tei_xml("book.epub")
+
+# Or write it next to the EPUB as book.xml
+epub_to_xml_file("book.epub")
+```
+
+## Batch conversion scripts
+
+The `scripts/` directory contains helpers to convert a whole tree of EPUBs.
+Each output file is written in the same directory as its source EPUB, with the
+extension swapped.
+
+Plain text (`.txt`):
+
+```bash
+python scripts/convert_epubs_to_txt.py path/to/epub/root
+```
+
+TEI XML (`.xml`):
+
+```bash
+python scripts/convert_epubs_to_xml.py path/to/epub/root --ie-id IE_EPUB
+```
+
+Both scripts recurse with `rglob("*.epub")`, log per-file progress, and skip
+corrupt EPUBs without aborting the whole batch.
+
 ## Notes
 
 - Output is streamed document-by-document; nothing is buffered into one giant string.
 - Font sizes are returned as written in the EPUB/CSS (for example `12pt`, `14px`, `1.2em`).
 - Complex CSS selectors (`#id`, descendant selectors, `@font-face`) are not fully supported yet.
+- TEI XML output normalizes Tibetan Unicode; non-Tibetan text is passed through unchanged.

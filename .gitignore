@@ -8,3 +8,8 @@ build/
 .venv/
 venv/
 *.epub
+
+# Local data and conversion artifacts
+.ref/
+epub/
+*.zip
